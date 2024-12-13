@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+	<html class="sl-root decks export offline loaded">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, minimal-ui">
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<link rel="manifest" href='data:application/manifest+json,{"display": "standalone", "name": "2024-12-04 Miking Workshop - TreePPL - A DSL in Miking for Phylogenetics"}' />
+		<title>2024-12-04 Miking Workshop - TreePPL - A DSL in Miking for Phylogenetics</title>
+
+
+		<link rel="stylesheet" type="text/css" href="lib/offline-v2.css">
+
+
+
+	</head>
+	<body class="reveal-viewport theme-font-quicksand theme-color-black-orange">
+		<div class="reveal">
+			<div class="slides">
+				<section class="stack" data-id="ff829deed3090d5bea1a7eb9723dc7e0"><section data-id="ed70fcb71d539b69555202127cbdc99e"><div class="sl-block" data-block-type="text" style="width: 960px; left: 0px; top: 69px; height: auto;" data-block-id="30bdfb3f84851071be64f571af0ae9bc"><div class="sl-block-content" data-placeholder-tag="h1" data-placeholder-text="Title Text" style="z-index: 10;"><h1><span style="font-size:1.0em">TreePPL - A DSL in Miking for Phylogenetics</span></h1></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-d0dbbe" data-block-id="d0c560c915156ecf34713af763bbd28d" style="height: auto; width: 960px; left: 0px; top: 498px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p>Miking Workshop 2024</p>
+<p>KTH Campus, Digital Futures Hub, Stockholm, Sweden</p>
+<p>4 Dec 2024</p>
+</div></div>
+<div class="sl-block" data-block-type="text" data-name="text-f83d95" data-block-id="ec924e9c8aa54ea01d4190e32f141194" style="height: auto; width: 960px; left: 0px; top: 387px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p>Viktor Senderov</p>
+
+<p><a href="https://github.com/vsenderov/2024-miking-workshop-treeppl" target="_blank">https://github.com/vsenderov/2024-miking-workshop-treeppl</a></p>
+</div></div></section><section data-id="99a016bf5e0bd787ffe106915828e330"><div class="sl-block" data-block-type="image" data-name="image-934a96" style="width: 466.667px; height: 700px; left: 486.666px; top: 0px; min-width: 1px; min-height: 1px;" data-block-id="f16053921a3337b32a1335f283981132"><div class="sl-block-content" style="z-index: 10;"><img class="" data-natural-width="640" data-natural-height="960" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/86b72de85b0a11fa7717ef3b0308563d.jpg"></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-01061f" style="height: auto; width: 480px; left: 0px; top: 67px;" data-block-id="d4d72aa86e0611dfc1134e664b3cbdfb"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><h2>Recap</h2></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-137b54" style="height: auto; width: 480px; left: 0px; top: 166px;" data-block-id="022f6cf44ccbd2716a93f18429c53522"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12; letter-spacing: -0.05em; font-size: 85%; line-height: 1.235;" data-has-letter-spacing="" data-has-line-height=""><ul>
+	<li class="fragment" data-fragment-index="0">
+<span style="font-size:1em"><span style="font-size:1.0em">​</span></span><span style="font-size:1em"><span style="font-size:1.0em">Phylogenetic inference<span style="font-size:1em"><span style="font-size:1.0em">​</span></span></span></span>
+	<ul>
+		<li><span style="font-size:1em"><span style="font-size:1.0em"><span style="font-size:1em"><span style="font-size:1.0em"><span style="font-size:1.0em">complex models</span></span></span></span></span></li>
+		<li>
+		<p><span style="font-size:1.0em">large and variable number of r.v.'s</span></p>
+		</li>
+		<li>
+		<p>hard-coded MCMC</p>
+		</li>
+	</ul>
+	</li>
+	<li class="fragment" data-fragment-index="1">
+	<p>Challenges</p>
+
+	<ul>
+		<li class="fragment" data-fragment-index="1">Manual implementation of MCMC</li>
+		<li>
+		<p>performance on large data-sets</p>
+		</li>
+		<li>
+		<p>cannot do model comparison</p>
+		</li>
+		<li>
+		<p>lack of validatation​</p>
+		</li>
+	</ul>
+	</li>
+	<li class="fragment" data-fragment-index="2">
+	<p><span>​In this presentation</span></p>
+
+	<ul>
+		<li>
+		<p><span>​Use Miking to develop a <strong>probabilistic programming language </strong>(PPL) aimed at computational biologists</span></p>
+		</li>
+	</ul>
+	</li>
+</ul></div></div></section></section><section class="stack" data-id="9a79609448659b577268edbb3400febd"><section data-id="2352a59c2908b2e68e0d830a1fa2bf4f"><div class="sl-block" data-block-type="text" data-name="text-23c37e" data-block-id="3b6935c46c6abfdf92fdd662b040beba" style="height: auto; width: 600px; left: 180px; top: 203.5px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;"><h1>Probabilistic Programming Languages</h1></div></div></section><section data-id="168fdee256b0a9ed6bcd3f6c0c449302">
+
+<div class="sl-block" data-block-type="text" data-name="text-a5af15" style="height: auto; width: 493.333px; left: -6.6665px; top: 91.5px;" data-block-id="7d984a0b96d873acbc990f7116008ba1"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;"><h2>ppls and Bayesian analysis</h2></div></div>
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" data-name="text-084092" data-block-id="997f639a8b30f6f8fa75e5a795f99b9a" style="height: auto; width: 493.333px; left: -6.6665px; top: 338.5px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; font-size: 85%; letter-spacing: -0.05em;" data-has-letter-spacing=""><ul>
+	<li class="fragment" data-fragment-index="0">
+<span style="color:rgb(255, 255, 255); font-size:25.5px; text-align:left">A ​probabilistic program</span>
+	<ul>
+		<li>​Bayesian model</li>
+		<li>​conditional simulation</li>
+	</ul>
+	</li>
+	<li class="fragment" data-fragment-index="1">Compilation
+	<ul>
+		<li>static analysis</li>
+		<li>statistical inference</li>
+	</ul>
+	</li>
+</ul></div></div>
+
+
+<div class="sl-block" data-block-type="image" data-name="image-0d5f66" data-block-id="07cbe065d1ee0aaf4d5d005e7727288e" style="width: 466.667px; height: 700px; left: 493.333px; top: 0px; min-width: 1px; min-height: 1px;"><div class="sl-block-content" style="z-index: 15;"><img class="" data-natural-width="640" data-natural-height="960" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/2276351ed936bcd195b78c92cc27698c.jpg"></div></div></section><section data-id="a48d5b549efd6c0e8efa15ad4bfd695c"><div class="sl-block" data-block-type="text" data-name="text-8b3d58" style="height: auto; width: 960px; left: 0px; top: 89px;" data-block-id="fb364d464f2a336915e486a08ac8802e">
+<div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10; text-align: center; font-size: 85%; line-height: 1.105;" data-has-line-height=""><pre style="text-align:center"><span style="color:rgb(169, 169, 169); font-size:0.9em">Given an </span><strong>abstract problem</strong><span style="font-size:0.9em">,
+</span><span style="color:rgb(169, 169, 169); font-size:0.9em">e.g. parameter estimation of a Bayesian model.</span> <span style="font-size:0.9em"><span style="color:#A9A9A9">Difference between
+</span><strong>programming </strong><span style="color:#A9A9A9">and</span> <strong>probabilistic programming</strong>?</span></pre></div>
+<grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 10;" class="dnXmp"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: 0px; pointer-events: none; z-index: 10;" class="dnXmp"></grammarly-extension>
+</div>
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" data-name="text-21d157" data-block-id="ec3bc83e5f0a11dd4f55ea6810fe58ae" style="height: auto; width: 452px; left: 7.875px; top: 299.5px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11; color: rgb(255, 255, 255); font-size: 85%; line-height: 1.105;" data-has-line-height="" data-fragment-index="0"><pre style="text-align:center"><strong>Solution,
+</strong>e.g. MCMC sampling of the posterior parameters,
+<strong>encoded by the programmer</strong>.</pre></div></div>
+
+<div class="sl-block" data-block-type="line" data-name="line-6ab32b" data-block-id="c19adad570f2056d5a2fc2aa5f1efceb" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 474.875px; top: 291px;"><div class="sl-block-content" data-line-x1="0" data-line-y1="320" data-line-x2="0" data-line-y2="0" data-line-color="#ffffff" data-line-start-type="none" data-line-end-type="none" style="z-index: 12;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="320" viewbox="0 0 1 320"><path class="line-element" fill="rgba(0,0,0,0)" stroke="#ffffff" stroke-width="2" d="M0 320 L0 0"></path><path class="line-skeleton" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" d="M0 320 L0 0"></path><path class="line-hitarea" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" stroke-width="15" d="M0 320 L0 0"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" data-name="line-26d4fd" data-block-id="90acca6b4104464a35c73e21f8d07feb" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 714.25px; top: 184px;"><div class="sl-block-content fragment" data-line-x1="0" data-line-y1="102" data-line-x2="0" data-line-y2="0" data-line-color="#ffffff" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 13;" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="102" viewbox="0 0 1 102"><path class="line-element" fill="rgba(0,0,0,0)" stroke="#ffffff" stroke-width="2" d="M0 100 L0 0"></path><path stroke="#ffffff" stroke-width="2" d="M -6 95 L 0 101 L 6 95 L 0 101" class="line-start"></path><path class="line-skeleton" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" d="M0 102 L0 0"></path><path class="line-hitarea" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" stroke-width="15" d="M0 102 L0 0"></path></svg></div></div>
+
+
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 233.5px; top: 184px;" data-block-id="419b24b0245f5e8d135aba19e0f552e7" data-name="line-ac713b"><div class="sl-block-content fragment" data-line-x1="0" data-line-y1="102" data-line-x2="0" data-line-y2="0" data-line-color="#ffffff" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 17;" data-fragment-index="0"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="1" height="102" viewbox="0 0 1 102"><path class="line-element" fill="rgba(0,0,0,0)" stroke="#ffffff" stroke-width="2" d="M0 100 L0 0"></path><path stroke="#ffffff" stroke-width="2" d="M -6 95 L 0 101 L 6 95 L 0 101" class="line-start"></path><path class="line-skeleton" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" d="M0 102 L0 0"></path><path class="line-hitarea" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" stroke-width="15" d="M0 102 L0 0"></path></svg></div></div>
+<div class="sl-block sl-block-group" data-block-type="group" data-name="group-23f561" data-block-id="26b9ba4779eb45657a3c76b030abc0ab"><div class="sl-block-content sl-block-group-content" style="transform-origin: 714.875px 450px; z-index: 14;">
+<div class="sl-block" data-block-type="text" data-name="text-d6060a" data-block-id="80380d2d169d29d1f40be795e31b80f6" style="height: auto; width: 448px; left: 490.875px; top: 299.5px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 85%; line-height: 1.105;" data-has-line-height="" data-fragment-index="1"><pre style="text-align: center;"><strong>Problem, </strong><span style="color:#A9A9A9">a programmatic representation of the Bayesian model as a conditional simulation, </span><strong>encoded by the programmer.</strong></pre></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-c408b0" data-block-id="99c7f5ba0b6aacc31b9b1c5d27dc4ba0" style="height: auto; width: 448px; left: 490.875px; top: 487.5px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16; font-size: 85%; line-height: 1.105;" data-has-line-height="" data-fragment-index="2"><pre style="text-align: center;"><strong>Solution, </strong><span style="color:#A9A9A9"><span style="text-align:left">e.g. MCMC sampling of the posterior parameters, </span></span><strong>supplied automatically by the compiler.</strong></pre></div></div>
+</div></div></section><section data-auto-animate="" data-id="8a91cc52fd4965030998df5fe07c0258"><div class="sl-block" data-block-type="math" data-name="math-a4c644" style="width: auto; height: auto; left: 142px; top: 248px;" data-block-id="a43e4434ef8ecac68f8aef05f57bc1f4"><div class="sl-block-content notranslate" data-math-display="true" style="z-index: 10; font-size: 94%; color: rgb(255, 255, 255);"><div class="math-input">\overbrace{p(\theta | x)}^{\scriptsize{\text{posterior distribution}}} = \frac{
+      \overbrace{p(x | \theta)}^{\scriptsize{\text{likelihood}}} 
+      \overbrace{p(\theta)}^{\scriptsize{\text{\: prior}}}
+    }
+    {
+      \underbrace{p(x)}_{\scriptsize{\text{normalizing constant}}}
+    }</div></div></div>
+
+<div class="sl-block" data-block-type="text" data-name="text-dbb6e9" data-block-id="367924d37294d27238f5730b4dd8bedf" style="height: auto; width: 148px; left: 520.5px; top: 204px;"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;" data-fragment-index="1"><p><code>observe</code></p></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 133px; left: 675.5px; top: 204px;" data-block-id="9b8db3fc6a313ee288674a682ed7dcbc" data-name="text-4af961"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;" data-fragment-index="0"><p><code>assume</code></p></div></div></section><section data-id="a8f9e59e82ed8c362a8b5545edf4e2fc"><div class="sl-block" data-block-type="text" style="width: 524.524px; left: 28.0793px; top: 96.221px; height: auto;" data-block-id="e73b2a0d097f70e948dc50a394910a7a" data-name="text-413087"><div class="sl-block-content" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="text-align: left; z-index: 10;"><h2>HISTORY of ppls</h2></div></div>
+<div class="sl-block" data-block-type="text" style="width: 379.317px; left: 586.683px; top: 96.221px; height: auto;" data-block-id="142b52f3241c1b5346f1c3edcdfe851e" data-name="text-e1a434"><div class="sl-block-content fragment" data-placeholder-tag="h2" data-placeholder-text="Title Text" style="text-align: left; z-index: 11;" data-fragment-index="3"><h2>IN biology</h2></div></div>
+<div class="sl-block" data-block-type="text" style="width: 379.317px; left: 586.683px; top: 195.221px; height: auto;" data-block-id="b419cee891828ad6de4897d05d1f594c" data-name="text-db304f"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin urna odio, aliquam vulputate faucibus id, elementum lobortis felis. Mauris urna dolor, placerat ac sagittis quis." style="text-align: left; z-index: 12; font-size: 85%; letter-spacing: -0.05em;" data-has-letter-spacing=""><ul>
+	<li class="fragment" data-fragment-index="3">2016 -<strong> RevBayes</strong><strong>: </strong>PGM-based</li>
+	<li class="fragment" data-fragment-index="3">2023 - <strong>LinguaPhylo</strong>
+</li>
+	<li class="fragment" data-fragment-index="3">2024 - <strong>BALI-Phy</strong>
+</li>
+</ul></div></div>
+
+
+<div class="sl-block" data-block-type="text" data-name="text-05eee1" data-block-id="fdf88ee74b4af3950f8687db34701fa5" style="height: auto; width: 592.683px; left: -6.0002px; top: 195.221px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 85%; letter-spacing: -0.05em;" data-has-letter-spacing=""><ul>
+	<li class="fragment" data-fragment-index="0">1989 - <strong>BUGS</strong> (Bayesian inference Using Gibbs Sampling)</li>
+	<li class="fragment" data-fragment-index="0">1997 - <strong>WinBUGS</strong>
+</li>
+	<li class="fragment" data-fragment-index="1" style="color:rgb(255, 255, 255); font-size:25.5px">2005 - <strong>PyMC</strong>: MCMC-based.</li>
+	<li class="fragment" data-fragment-index="0">2007 - <strong>JAGS</strong> (Just Another Gibbs Sampler)</li>
+	<li class="fragment" data-fragment-index="1">2008 - <strong>Church</strong>: a Lisp-like PPL, expressiveness, recursive stochastic functions.</li>
+	<li class="fragment" data-fragment-index="2"><span style="font-size:25.5px; text-align:left">2008 - <strong>Infer.NET</strong></span></li>
+	<li class="fragment" data-fragment-index="1">2012 - <strong>Stan</strong>: Hamiltonian Monte Carlo (HMC)</li>
+	<li class="fragment" data-fragment-index="2">2014 - <strong>WebPPL</strong>: a PPL that runs in web browsers.</li>
+	<li class="fragment" data-fragment-index="2">2016 - <strong>Edward</strong> (and <strong>Edward2</strong>): TensorFlow</li>
+	<li class="fragment" data-fragment-index="2">2020 - <strong>Turing.jl</strong>: A PPL for  Julia</li>
+</ul></div></div></section><section data-id="090df4fe5437355f8745185e35c90a00"><div class="sl-block" data-block-type="shape" data-name="shape-74b5c5" data-block-id="d1e2e9057ef997771c12819a47585470" style="width: 215px; height: 215px; left: 290.5px; top: 188.75px;"><div class="sl-block-content" data-shape-type="circle" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 10;" data-shape-stroke-color="#ffffff" data-shape-stroke-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 215 215"><defs><clippath id="shape-mask-1-1733043054869"><ellipse rx="107.5" ry="107.5" cx="107.5" cy="107.5" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="2"></ellipse></clippath></defs><ellipse rx="107.5" ry="107.5" cx="107.5" cy="107.5" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="2" clip-path="url(#shape-mask-1-1733043054869)"></ellipse></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 215px; height: 215px; left: 398px; top: 188.75px;" data-block-id="8450d064e95aad44a00af25b76778b6f" data-name="shape-e05092"><div class="sl-block-content" data-shape-type="circle" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 11;" data-shape-stroke-color="#ffffff" data-shape-stroke-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 215 215"><defs><clippath id="shape-mask-2-1733043081990"><ellipse rx="107.5" ry="107.5" cx="107.5" cy="107.5" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="2"></ellipse></clippath></defs><ellipse rx="107.5" ry="107.5" cx="107.5" cy="107.5" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="2" clip-path="url(#shape-mask-2-1733043081990)"></ellipse></svg></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 215px; height: 215px; left: 341.5px; top: 296.25px;" data-block-id="e6776c2d7063b4ddba13424b2f0d10bd" data-name="shape-bdc273"><div class="sl-block-content" data-shape-type="circle" data-shape-fill-color="rgba(0, 0, 0, 0)" data-shape-stretch="true" style="z-index: 12;" data-shape-stroke-color="#ffffff" data-shape-stroke-width="1px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 215 215"><defs><clippath id="shape-mask-3-1733043090576"><ellipse rx="107.5" ry="107.5" cx="107.5" cy="107.5" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="2"></ellipse></clippath></defs><ellipse rx="107.5" ry="107.5" cx="107.5" cy="107.5" class="shape-element" fill="rgba(0, 0, 0, 0)" stroke="#ffffff" stroke-width="2" clip-path="url(#shape-mask-3-1733043090576)"></ellipse></svg></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-96ae24" data-block-id="c76aac7474d0ade49a8e3c30b7f7707b" style="height: auto; width: 220px; left: 172.5px; top: 246.75px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; font-size: 85%; line-height: 1.105;" data-has-line-height=""><pre>expressiveness</pre></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 245px; left: 542.5px; top: 246.75px;" data-block-id="5747966c03e7ed9508c9cd4ceb37d8e9" data-name="text-daa671"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 85%; line-height: 1.105;" data-has-line-height=""><pre>inference power</pre></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 176px; left: 364px; top: 445.75px;" data-block-id="ed4964a408e3212daa11576a6ccd5554" data-name="text-ed0b3b"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 85%; line-height: 1.105;" data-has-line-height=""><pre>ease of use</pre></div></div>
+<div class="sl-block" data-block-type="shape" data-name="shape-d6b146" data-block-id="ce9a1da41c18f17b0a67131536b3e817" style="width: 41px; height: 41px; left: 431.5px; top: 312.75px;"><div class="sl-block-content" data-shape-type="symbol-pin" data-shape-fill-color="rgb(255, 255, 255)" data-shape-stretch="true" style="z-index: 16;"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="-0.0005002021789550781 0.0004999637603759766 20.000749588012695 31.999500274658203"><g class="shape-element" fill="rgb(255, 255, 255)" data-viewbox="-0.0005002021789550781 0.0004999637603759766 20.000749588012695 31.999500274658203"><path d="M17.070 2.93c-3.906-3.906-10.234-3.906-14.141 0-3.906 3.904-3.906 10.238 0 14.14 0.001 0 7.071 6.93 7.071 14.93 0-8 7.070-14.93 7.070-14.93 3.907-3.902 3.907-10.236 0-14.14zM10 14c-2.211 0-4-1.789-4-4s1.789-4 4-4 4 1.789 4 4-1.789 4-4 4z"></path></g></svg></div></div></section></section><section class="stack" data-id="7071c0b802682113ca7014e3007c0787"><section data-id="87a567fa07b12d7ee47aa4ec6549ca5e">
+
+
+
+
+<div class="sl-block" data-block-type="text" data-name="text-c6fbbd" data-block-id="20a3b1482be168ef8bd047dadea4916a" style="height: auto; width: 960px; left: 0.7995px; top: 222.5px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;"><h1>treeppl</h1></div></div>
+
+<div class="sl-block" data-block-type="text" data-name="text-4b0778" style="height: auto; width: 961.599px; left: 0px; top: 345.5px;" data-block-id="ad30f782ebed1d12a2f15922b7ba2dd9"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p>Download: <a href="https://github.com/treeppl/treeppl" target="_blank">https://github.com/treeppl/treeppl</a></p>
+
+<p><span style="color:rgb(255, 255, 255)">Installation and documentation: <a href="https://treeppl.org" target="_blank">https://treeppl.org</a></span></p>
+
+<p><span style="color:rgb(255, 255, 255)">Pre-print: </span><a href="https://doi.org/10.1101/2023.10.10.561673" target="_blank">https://doi.org/10.1101/2023.10.10.561673</a></p>
+</div></div>
+
+</section><section data-auto-animate="" data-id="d11ad20fd713d7ac675b878d2a6177fa"><div class="sl-block" data-block-type="image" data-name="image-c5d74d" style="width: 806.4px; height: 233.1px; left: 56.8px; top: 277.95px; min-width: 1px; min-height: 1px;" data-block-id="c22baad666aa18508254153276356bb8"><div class="sl-block-style" style="z-index: 10; filter: drop-shadow(rgb(27, 166, 225) 0px 0px 2px) opacity(100%);"><div class="sl-block-content" style="z-index: 10;"><img class="" data-natural-width="1280" data-natural-height="370" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/09b614dd6bb467cf99ca6c09db9ea322.png"></div></div></div>
+<div class="sl-block" data-block-type="shape" data-name="shape-092046" style="width: 113px; height: 89px; left: 60px; top: 286.5px;" data-block-id="bb0954eebc68b93657efef2af1f469a8"><div class="sl-block-style" style="z-index: 11; opacity: 0.46;"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgb(255, 255, 0)" data-shape-stretch="true" style="z-index: 11;" data-fragment-index="0"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 113 89"><rect width="113" height="89" rx="0" ry="0" class="shape-element" fill="rgb(255, 255, 0)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 113px; height: 89px; left: 453px; top: 305.5px;" data-name="shape-c080b0" data-block-id="84effd4fddcb33e03d6af44e8fbc3593"><div class="sl-block-style" style="z-index: 12; opacity: 0.46;"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgb(255, 255, 0)" data-shape-stretch="true" style="z-index: 12;" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 113 89"><rect width="113" height="89" rx="0" ry="0" class="shape-element" fill="rgb(255, 255, 0)"></rect></svg></div></div></div>
+<div class="sl-block" data-block-type="shape" style="width: 113px; height: 89px; left: 731px; top: 305.5px;" data-name="shape-87e43c" data-block-id="115b0fe7938b868c8bd381f0d5e32d76"><div class="sl-block-style" style="z-index: 13; opacity: 0.46;"><div class="sl-block-content fragment" data-shape-type="rect" data-shape-fill-color="rgb(255, 255, 0)" data-shape-stretch="true" style="z-index: 13;" data-fragment-index="1"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100%" height="100%" preserveaspectratio="none" viewbox="0 0 113 89"><rect width="113" height="89" rx="0" ry="0" class="shape-element" fill="rgb(255, 255, 0)"></rect></svg></div></div></div>
+
+
+<div class="sl-block" data-block-type="line" data-name="line-caab14" style="width: auto; height: auto; left: 145.5px; top: 518.991px;" data-block-id="7bcaa0ab162d3e7943f55ac282e56c85"><div class="sl-block-content fragment" data-line-x1="0" data-line-y1="0" data-line-x2="16" data-line-y2="40.50884595454882" data-line-color="#fff2cc" data-line-start-type="arrow" data-line-end-type="none" style="z-index: 14;" data-fragment-index="2" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="16" height="40.50884595454882" viewbox="0 0 16 40.50884595454882"><path class="line-element" fill="rgba(0,0,0,0)" stroke="#fff2cc" stroke-width="3" d="M2.755 6.976 L16 40.509"></path><path fill="#fff2cc" d="M 7.492 6.718 L 0 0 L -0.879 10.024" class="line-start"></path><path class="line-skeleton" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" d="M0 0 L16 40.509"></path><path class="line-hitarea" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" stroke-width="15" d="M0 0 L16 40.509"></path></svg></div></div>
+
+
+
+
+
+<div class="sl-block" data-block-type="text" data-name="text-0deeca" style="height: auto; width: 600px; left: 367px; top: 154px;" data-block-id="76fa283c92ad3e7f0a3703d803ec86f7"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15; font-size: 85%; line-height: 1.105;" data-fragment-index="1" data-has-line-height=""><pre>... and supplies the<span style="color:#696969"> </span><strong>data </strong>and the data manipulation functions.</pre></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 571.981px; top: 236px;" data-name="line-7b7b11" data-block-id="1581ffe90c6ed1d7b8e4335a815741ac"><div class="sl-block-content fragment" data-line-x1="0" data-line-y1="30" data-line-x2="60.03692390258348" data-line-y2="0" data-line-color="#fff2cc" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 16;" data-fragment-index="1" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="60.03692390258348" height="30" viewbox="0 0 60.03692390258348 30"><path class="line-element" fill="rgba(0,0,0,0)" stroke="#fff2cc" stroke-width="3" d="M2.684 28.659 L60.037 0"></path><path stroke="#fff2cc" stroke-width="3" d="M 4.139 20.386 L 1.118 29.441 L 10.174 32.462 L 1.118 29.441" class="line-start"></path><path class="line-skeleton" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" d="M0 30 L60.037 0"></path><path class="line-hitarea" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" stroke-width="15" d="M0 30 L60.037 0"></path></svg></div></div>
+<div class="sl-block" data-block-type="line" style="width: auto; height: auto; left: 731px; top: 236px;" data-name="line-70e9f6" data-block-id="2c18ae7a05aaeb1a082aa6eab3675651"><div class="sl-block-content fragment" data-line-x1="56.5" data-line-y1="30" data-line-x2="0" data-line-y2="0" data-line-color="#fff2cc" data-line-start-type="line-arrow" data-line-end-type="none" style="z-index: 17;" data-fragment-index="1" data-line-width="3px"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="56.5" height="30" viewbox="0 0 56.5 30"><path class="line-element" fill="rgba(0,0,0,0)" stroke="#fff2cc" stroke-width="3" d="M53.85 28.593 L0 0"></path><path stroke="#fff2cc" stroke-width="3" d="M 46.269 32.21 L 55.396 29.414 L 52.6 20.287 L 55.396 29.414" class="line-start"></path><path class="line-skeleton" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" d="M56.5 30 L0 0"></path><path class="line-hitarea" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" stroke-width="15" d="M56.5 30 L0 0"></path></svg></div></div>
+
+<div class="sl-block" data-block-type="text" data-name="text-585f21" style="height: auto; width: 953px; left: 3.5px; top: 70px;" data-block-id="9046fb2123cbe0ac089a501d3517a9d0"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 19; font-size: 85%; line-height: 1.105;" data-fragment-index="0" data-has-line-height=""><pre>The user <strong>models</strong>, e.g. a regression model, expressed as a <strong>conditional simulation</strong> (not the inference!)...</pre></div></div>
+<div class="sl-block" data-block-type="line" data-name="line-2ac085" data-block-id="c3aa40d5f747bd172f339ce0b1c9c54c" style="width: auto; height: auto; min-width: 0px; min-height: 0px; left: 140px; top: 132px;"><div class="sl-block-content fragment" data-line-x1="107" data-line-y1="0" data-line-x2="0" data-line-y2="134" data-line-color="#fff2cc" data-line-width="3px" data-line-start-type="none" data-line-end-type="line-arrow" data-line-style="solid-rounded" style="z-index: 20;" data-fragment-index="0"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" preserveaspectratio="xMidYMid" width="107" height="134" viewbox="0 0 107 134"><path class="line-element" fill="rgba(0,0,0,0)" stroke="#fff2cc" stroke-width="3" stroke-linecap="round" d="M107 0 L1.872 131.656"></path><path stroke="#fff2cc" stroke-width="3" d="M 9.957 132.348 L 0.47 133.411 L -0.592 123.924 L 0.47 133.411" stroke-linecap="round" stroke-linejoin="round" class="line-end"></path><path class="line-skeleton" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" d="M107 0 L0 134"></path><path class="line-hitarea" fill="rgba(0,0,0,0)" stroke="rgba(0,0,0,0)" stroke-width="15" d="M107 0 L0 134"></path></svg></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 960px; left: 7px; top: 581.5px;" data-block-id="06b33f706d62213a0fed270a2b932fb1" data-name="text-07ef74"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 21; font-size: 85%; line-height: 1.105;" data-fragment-index="2" data-has-line-height=""><pre>The <strong>inference code</strong> is then automatically attached to the program by the compiler.</pre></div></div></section><section data-id="326b17d0fd1a77173cb89b8f5c903650"><div class="sl-block" data-block-type="text" style="width: 414px; left: 266px; top: 180.5px; height: auto;" data-block-id="46a8a88f4fe48d16403983a32c160327">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text"><h2>"hello, world!"</h2></div>
+						</div>
+
+
+<div class="sl-block" data-block-type="code" data-name="code-56ec57" data-block-id="de8fc2af37ef3d6dc546b2ec029b1421" style="width: 587px; height: 261px; left: 186.5px; top: 258.5px;"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 12;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">function flip(datapoint: Bool, probability: Real) {
+  observe datapoint ~ Bernoulli(probability);
+}
+
+model function coinModel(coinflips: Bool[]) {
+  assume p ~ Beta(2.0, 2.0); // prior
+  let n = length(coinflips);
+  for i in 1 to n {
+    flip(coinflips[i], p); // likelihood
+  }
+  return(p); // posterior
+}</code></pre></div></div></section><section data-id="fff491f295097522d7c40dd0188e29dc"><div class="sl-block" data-block-type="text" style="width: 155px; left: 402.5px; top: 53px; height: auto;" data-block-id="a6045bf12cd872f7a58b69eea42dab76">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text"><h2>TYPES</h2></div>
+						</div>
+
+<div class="sl-block" data-block-type="text" data-name="text-ecd7e1" style="height: auto; width: 800px; left: 80px; top: 131px;" data-block-id="e5d5b84d5458d69fe95c6fcb9299e517"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><ul>
+	<li>
+	<p>Statically typed language</p>
+	</li>
+	<li>
+	<p>Basic datatypes: <em>integer, </em><em>real, boolean, </em>and <em>string.</em></p>
+	</li>
+	<li>
+	<p>Vectors</p>
+	</li>
+	<li>
+	<p>Tensors</p>
+	</li>
+	<li>
+	<p>Records</p>
+	</li>
+	<li>
+	<p>Sum types (a type of algebraic data type)</p>
+	</li>
+</ul></div></div>
+<div class="sl-block" data-block-type="code" data-name="code-1024f2" data-block-id="5fc65d8eed4f1670d955948e80dd1888" style="width: 495px; height: 83px; left: 234px; top: 435px;"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 12;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">type Tree =
+  | Leaf {age: Real}
+  | Node {left: Tree, right: Tree, age: Real}
+</code></pre></div></div></section><section data-id="3b31c465590e013644d85eb7223308ec"><div class="sl-block" data-block-type="text" style="width: 320px; left: 320px; top: 86px; height: auto;" data-block-id="e0147ac7620402ddf4091d8dfcb4813b">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text"><h2>Functions</h2></div>
+						</div>
+
+<div class="sl-block" data-block-type="text" data-name="text-ecd7e1" style="height: auto; width: 800px; left: 80px; top: 164px;" data-block-id="bc15aabb7ca0c61ea3f0bb695e866a9c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><ul>
+	<li>
+	<p>Can be passed as arguments to other functions</p>
+	</li>
+	<li>
+	<p>Anonymous functions supported</p>
+	</li>
+	<li>
+	<p>Partial application supported</p>
+	</li>
+</ul></div></div>
+<div class="sl-block" data-block-type="code" data-name="code-674f4e" data-block-id="986c4fb6f84fe4a1daced5d48b498127" style="width: 508px; height: 128px; left: 226px; top: 329px;"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 12;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">model function example():() {
+  let c = 10;
+  let x = sapply(1 to 5, function (i: Int) {
+    return addi(c, i);
+  });
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="code" data-name="code-dfa7b8" data-block-id="35c706e2499e591b91b3de7a4fc5057f" style="width: 752px; height: 132px; left: 104px; top: 482px;"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 13;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">// evolveMessageClosure is a function of 4 paramters  
+let evolveMessage = evolveMessageClosure(m, t, u); // partial application
+let ret = sapply(messages, evolveMessage);</code></pre></div></div></section><section data-id="e6ab99026bfd429315ad732d491b9f8f"><div class="sl-block" data-block-type="text" style="width: 315px; left: 322.5px; top: 102px; height: auto;" data-block-id="997016cbf31caef0f52ea1813a419c13">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text"><h2>Data Model</h2></div>
+						</div>
+
+<div class="sl-block" data-block-type="text" data-name="text-ecd7e1" style="height: auto; width: 800px; left: 80px; top: 180px;" data-block-id="dce20fa44b6c6c4ee86e2f66a8ba7529"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><ul>
+	<li>
+	<p>Variables are immutable</p>
+	</li>
+	<li>
+	<p>Shadowing is allowed</p>
+	</li>
+</ul></div></div>
+<div class="sl-block" data-block-type="code" data-name="code-a2630e" data-block-id="e9054b1cae02645f8695ae04e11c0094" style="width: 363px; height: 301px; left: 298.5px; top: 298px;"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 12;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">model function shadowing():() {
+    let x = 200;
+    printLn(int2string(x));
+    if (true) {
+        let x = 300;
+        printLn(int2string(x));
+    }
+    printLn(int2string(x));
+    return;
+}
+
+// outputs 200, 300, 200</code></pre></div></div></section><section data-id="3892fb9409fa7bf4086b5638dffed864"><div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 138px; height: auto;" data-block-id="686ddac081dc27166b599daadfb862b4">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text">
+								<h2>Probabilistic programming</h2>
+							</div>
+						</div>
+
+<div class="sl-block" data-block-type="text" data-name="text-9a9d03" data-block-id="cedd77416cdb1b0600e11a32b0e22bf9" style="height: auto; width: 960px; left: 0px; top: 216px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><table style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">
+	<tbody>
+		<tr>
+			<td>Use the <code>assume</code> keyword to introduce a random variable</td>
+		</tr>
+	</tbody>
+</table></div></div>
+<div class="sl-block" data-block-type="code" data-name="code-51b7d9" data-block-id="b99b537a084cbd29673c4830d15304b0" style="width: 478px; height: 107px; left: 241px; top: 282px;"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 12;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">assume p ~ Beta(a, b);
+assume x ~ Exponential(rate);
+assume y ~ Gamma(shape, scale);
+assume w ~ Gaussian(mean, stdDev);
+assume v ~ Bernoulli(prob);</code></pre></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 640px; left: 160px; top: 414px;" data-block-id="d7087203a03c7f926382fe0ea6d4f696" data-name="text-2f94ff"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; font-size: 85%; letter-spacing: -0.05em;" data-has-letter-spacing="" data-fragment-index="0">
+<p style="text-align:left">TreePPL is a <em>universal PPL</em></p>
+
+<ul>
+	<li style="text-align:left">Number of r.v. does not have to be known in advance</li>
+	<li style="text-align:left">R.v.'s can be defined in stochastic recursive functions</li>
+	<li style="text-align:left">and in stochastic branches (<code>if</code>'s)</li>
+</ul>
+</div></div></section><section data-id="22489ab6796e0da27019bbb087986385"><div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 223.25px; height: auto;" data-block-id="95ee33f9081d15be7517426995e1ac6c">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text"><h2>Probabilistic programming 1</h2></div>
+						</div>
+
+<div class="sl-block" data-block-type="code" data-name="code-51b7d9" style="width: 500px; height: 112px; left: 230px; top: 364.75px;" data-block-id="1e196e8b51faa48e4ef4e1e1a2331cf5"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 11;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">observe data ~ Beta(a, b);
+observe data ~ Exponential(a, b);
+observe data ~ Gamma(shape, scale);
+observe data ~ Gaussian(shape, scale);
+observe data ~ Bernoulli(prob);</code></pre></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-837f4c" data-block-id="043d10509f5679db3216c9bb503c2463" style="height: auto; width: 960px; left: 0px; top: 301.25px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;"><p><span style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">Use the </span><code style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">observe</code><span style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left"> keyword to condition the likelihood on observed data</span></p></div></div></section><section data-id="03c5812078c8227a71c770d00be813fd"><div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 241.5px; height: auto;" data-block-id="cae489123857a36fa1aeb7f9e974965c">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text"><h2>Probabilistic programming 2</h2></div>
+						</div>
+
+<div class="sl-block" data-block-type="code" data-name="code-51b7d9" style="width: 632px; height: 73px; left: 164px; top: 385.5px;" data-block-id="b4f25d18d5bf1c1d498edf23dbbb7178"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 11;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">weight(lik); // lik is not on the logartihmic scale
+logWeight(lik); // lik is on the logarithmic scale
+</code></pre></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-837f4c" style="height: auto; width: 960px; left: 0px; top: 319.5px;" data-block-id="42d87c78f7c3b619ed1377501b597e83"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;"><table style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">
+	<tbody>
+		<tr>
+			<td>To manipulate the likelihood directly use <code>weight </code><span style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">or </span><code style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">logWeight</code>
+</td>
+			<td> </td>
+		</tr>
+	</tbody>
+</table></div></div></section><section data-id="e78592360b248f9318cd91f633720e41"><div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 247px; height: auto;" data-block-id="215f190eac5d29b85808ce0f5aded40a">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text"><h2>Probabilistic programming 3</h2></div>
+						</div>
+
+<div class="sl-block" data-block-type="code" data-name="code-51b7d9" style="width: 599px; height: 65px; left: 180.5px; top: 388px;" data-block-id="dceb0a28a2f8770e4c4027259e321248"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 11;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="">return p; // If the likelihood was not manipulated
+          // it will be exactly the prior</code></pre></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-837f4c" style="height: auto; width: 960px; left: 0px; top: 325px;" data-block-id="86958a1eeefed81a0d0c4840be41282a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;"><table style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">
+	<tbody>
+		<tr>
+			<td><span style="color:rgb(255, 255, 255); font-size:22.5px; text-align:left">The posterior is the returned value of the model function</span></td>
+			<td> </td>
+		</tr>
+	</tbody>
+</table></div></div></section><section data-auto-animate="" data-id="8bb84870dd6d27eed4201ce2a91d8a32">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 132.5px;" data-name="text-8e7949" data-block-id="a77c7fa60c322f065526f5ceaa8cee76"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;">
+<h2><span style="font-size:1.0em">Statistical Inference​</span></h2>
+
+<ul>
+	<li class="fragment" data-fragment-index="0"><span style="font-size:1.0em">importance sampling</span></li>
+	<li class="fragment" data-fragment-index="1">
+<span style="font-size:1.0em">Various sequential Monte Carlo schemas</span>
+	<ul>
+		<li><span style="font-size:1.0em">bootstrap particle filter (BPF) and the alive particle filter (APF)</span></li>
+	</ul>
+	</li>
+	<li class="fragment" data-fragment-index="2">
+<span style="font-size:1.0em">Various Markov-chain Monte Carlo schemas</span>
+	<ul>
+		<li><span style="font-size:1.0em">lightweight MCMC, trace MCMC, naive MCMC</span></li>
+	</ul>
+	</li>
+	<li class="fragment" data-fragment-index="3"><span style="font-size:1.0em">hybrid schema: particle MCMC–particle independent Metropolis-Hastings (PMCMC-PIMH)</span></li>
+</ul>
+</div></div>
+</section><section data-id="9a02a3c0067c47944644f3f139953925">
+<div class="sl-block" data-block-type="text" data-name="text-faeecb" style="height: auto; width: 600px; left: 180px; top: 18.65px;" data-block-id="e000898b530645a6ed04ec378b0e3937"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;"><h2>Path degeneracy</h2></div></div>
+<div class="sl-block" data-block-type="image" data-name="image-d3f266" style="width: 666.343px; height: 388.7px; left: 146.828px; top: 117.65px; min-width: 1px; min-height: 1px;" data-block-id="cae3c2710a1aa1a9a264ea5916b7a70e"><div class="sl-block-content" style="z-index: 11;"><img class="" data-natural-width="864" data-natural-height="504" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/f3c9a67f9f8d32289bcf7eaaf091cd54.png"></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-e00f54" style="height: auto; width: 583.5px; left: 188.25px; top: 531.35px;" data-block-id="547fd4fe1c7f28c11209e2751fed1c1c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;">
+<p><span style="font-size:0.7em">Illustration of path degeneracy</span></p>
+
+<p><span style="font-size:0.5em"><a href="https://awllee.github.io/smc-tutorial/smc-tutorial.html#36" target="_blank">https://awllee.github.io/smc-tutorial/smc-tutorial.html#36</a></span></p>
+</div></div>
+<div class="sl-block" data-block-type="text" data-name="text-091f8c" data-block-id="833049f7abe8f5eefa21c3b6253b59bb" style="height: auto; width: 653.171px; left: 153.415px; top: 642.35px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;"><p>We offer the alive particle filter to combat that.</p></div></div></section><section data-id="b340ede044fa6b4ba881e08eb784a79c"><div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 39.5px; height: auto;" data-block-id="84c9fbf9895ca235755593eee79df3d2">
+							<div class="sl-block-content" style="text-align: left; line-height: 1.04; letter-spacing: -0.1em; font-size: 90%; z-index: 10;" data-has-line-height="" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text">
+								<h2>Delayed Sampling</h2>
+							</div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 102.5px; height: auto;" data-block-id="75647b8fc954b42964b0c8360f3a0e91">
+							<div class="sl-block-content" style="text-align: left; z-index: 11;" data-placeholder-tag="p" data-placeholder-text="Text">
+								<ul>
+<li>A variance-minimization technique</li>
+<li>You don't need to sample all r.v.'s in a model</li>
+</ul>
+							</div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 190.5px; height: auto;" data-block-id="bec7a1838220b9f25519566205e9484c">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 12;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="0"><p>Let \(k \in \mathbb{N}\) in</p></div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 237.5px; height: auto;" data-block-id="67a078c7120e4b8990bf85733e7c3220">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 13;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="0">
+								<p>$$\nu \sim Gamma(k, \Theta),$$</p>
+							</div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 288.5px; height: auto;" data-block-id="10fa5c11b3aec49a3aad235655dcb08f">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 14;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="1"><p>Then, to draw from</p></div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 338.5px; height: auto;" data-block-id="5cb0ff578a104affb889bbff886bf481">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 15;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="1">
+<p>$$n \sim Poisson(\nu t)$$</p>
+							</div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 393.5px; height: auto;" data-block-id="a3988e3258c96f39dba907976334407d">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 16;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="1"><p>we don't need to sample \(\nu\) explicitly!</p></div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 464.5px; height: auto;" data-block-id="b9d4adb401374940235476b849fbb749">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 17;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="2">
+								<p>$$n \sim NegativeBionomial(k, \frac{1}{1 + t \theta})$$</p>
+							</div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 550.5px; height: auto;" data-block-id="4a0386f4b10b96b3c061b082b452495f">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 18;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="3"><p>and then update (backpropagate the belief) about \(\nu\) to</p></div>
+						</div>
+<div class="sl-block" data-block-type="text" style="width: 352px; left: 304px; top: 607.5px; height: auto;" data-block-id="feb561a4fe42a315d51d68a7c3c4b224">
+							<div class="sl-block-content fragment" style="text-align: left; z-index: 19;" data-placeholder-tag="p" data-placeholder-text="Text" data-fragment-index="3"><p>\(\nu \sim Gamma(k + n, \frac{\theta}{1 + t \theta})\).</p></div>
+						</div>
+<div class="sl-block" data-block-type="text" data-name="text-a07f4b" style="height: auto; width: 600px; left: 411px; top: 393.5px;" data-block-id="ce0c782014c3c3381678e75574009ca0"><div class="sl-block-content fragment" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 20;" data-fragment-index="2"><p> Instead we can</p></div></div></section><section data-id="a4aecc92e175b4f01ebf35ff171fb6a9"><div class="sl-block" data-block-type="text" style="width: 768px; left: 96px; top: 264.5px; height: auto;" data-block-id="1bcf01fb7195291f4e64dd3be5b57970">
+							<div class="sl-block-content" style="text-align: left; letter-spacing: -0.05em; z-index: 10;" data-has-letter-spacing="" data-placeholder-tag="p" data-placeholder-text="Text">
+<h2>Further Optimizations</h2>
+
+<ul>
+	<li>Alignment analysis</li>
+	<li>Partial CPS transformation</li>
+</ul>
+</div>
+						</div>
+
+
+
+
+
+
+
+
+
+</section><section data-auto-animate="" data-id="fd88d82b1d06d5ee6a4c96dbabc88328">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 780px; left: 90px; top: 130px;" data-name="text-8e7949" data-block-id="e689a98dedf1b3fc981badb8524f2b39"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+<h2>
+<span style="font-size:1em; text-align:left">PHy</span><span style="font-size:1em; text-align:left">LOGENTICS WITH TREEPPL</span>
+</h2>
+
+<ul>
+	<li class="fragment" data-fragment-index="0">Interfaces to Python and R to use BioPython and Bioconductor for I/O and plotting</li>
+	<li class="fragment" data-fragment-index="1">Tree datatypes and associated functions in standard library</li>
+	<li class="fragment" data-fragment-index="2">Inference methods and optimizations very useful for phylogenetic problems</li>
+	<li class="fragment" data-fragment-index="3">Example models </li>
+</ul>
+</div></div>
+</section><section data-id="33b95f3ee526f3f9ae81af57de02b607"><div class="sl-block" data-block-type="image" data-name="image-b32621" style="width: 449.82px; height: 447.399px; left: 17.3072px; top: 148.3px; min-width: 1px; min-height: 1px;" data-block-id="0b4f0623dc8a370311197866a2b76aa1"><div class="sl-block-style" style="z-index: 10; opacity: 0.7;"><div class="sl-block-content" style="z-index: 10;"><img class="" data-natural-width="929" data-natural-height="924" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/da558f74fce4a326132b21734756da47.png"></div></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-8cdf2e" style="height: auto; width: 102.693px; left: 80px; top: 612.25px;" data-block-id="f3177d9843147ef7a7a3ca335aba8cd0"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><p>ClaDS               </p></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 98px; left: 71px; top: 109.3px;" data-name="text-458941" data-block-id="c943101db0e1409bf3ca792587d5133c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;"><p>CRBD               </p></div></div>
+<div class="sl-block" data-block-type="image" data-name="image-e5038d" style="width: 463.5px; height: 447.399px; left: 488.25px; top: 148.3px; min-width: 1px; min-height: 1px;" data-block-id="618635db3d79f37e1bbd6a8f612b5ff7"><div class="sl-block-style" style="z-index: 13; opacity: 0.7;"><div class="sl-block-content" style="z-index: 13;"><img class="" data-natural-width="950" data-natural-height="917" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/7792730dab3e82fda7cfda6f4cda4e6b.png"></div></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-39d11d" style="height: auto; width: 960px; left: 0px; top: 0px;" data-block-id="1d6aba098e5edc7d26d87cdced16c381"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;"><h2><span style="font-size:0.5em">macroevolutionary diversification models</span></h2></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 98px; left: 320px; top: 109.3px;" data-name="text-5f3eda" data-block-id="a0398060f3a80c63ce10f1d6b6f913ba"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;"><p>TDBD</p></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 182.693px; left: 284.434px; top: 612.25px;" data-name="text-513dea" data-block-id="e15cd68788c5925ae56b8ee194cc23f6"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 16;"><p>AnaDS/BDD</p></div></div></section><section data-id="b95dae007f0ac24340936887d635ba26"><div class="sl-block" data-block-type="image" style="width: 960px; height: 599.68px; left: 0px; top: 100.32px; min-width: 1px; min-height: 1px;" data-block-id="3a6fa6f3df21ef1f2f5062a7ed07ff3c"><div class="sl-block-style" style="z-index: 10; opacity: 0.7;"><div class="sl-block-content" style="z-index: 10;"><img style="" data-natural-width="1500" data-natural-height="937" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/c3fb96de37ae3461edbc998a9e252361.png"></div></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-ea64e1" style="height: auto; width: 960px; left: 0px; top: -4px;" data-block-id="af680adcb7bd97d448217ac260056549"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><h2><span style="font-size:0.7em">Message-passing likelihood calculation</span></h2></div></div></section><section data-id="98dc7604dd933d40f68e53186baede40"><iframe srcdoc="
+                        
+                        
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Data Plotting Example&lt;/title&gt;
+  &lt;br&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/chart.js&quot;&gt;&lt;/script&gt;
+  &lt;style&gt;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    canvas {
+      display: block;
+    }
+    .example-text {
+      text-align: center;
+      color: inherit; /* Use inherited text color from the webpage */
+      margin-top: 10px;
+    }
+  &lt;/style&gt;        
+                
+                
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;canvas id=&quot;myChart&quot;&gt;&lt;/canvas&gt;
+  &lt;script&gt;
+    // The data array
+    var data = [
+      {x: 1, y: 2},
+      {x: 2, y: 4},
+      {x: 3, y: 6},
+      {x: 4, y: 8},
+      {x: 5, y: 10}
+    ];
+
+    // The quadratic data array
+    var quadraticData = [
+      {x: 1, y: 1 + 1 * Math.pow(1, 2)},
+      {x: 2, y: 1 + 1 * Math.pow(2, 2)},
+      {x: 3, y: 1 + 1 * Math.pow(3, 2)},
+      {x: 4, y: 1 + 1 * Math.pow(4, 2)},
+      {x: 5, y: 1 + 1 * Math.pow(5, 2)}
+    ];
+
+    // The cubic data array
+    var cubicData = [
+      {x: 1, y: 1 + 1 * Math.pow(1, 3)},
+      {x: 2, y: 1 + 1 * Math.pow(2, 3)},
+      {x: 3, y: 1 + 1 * Math.pow(3, 3)},
+      {x: 4, y: 1 + 1 * Math.pow(4, 3)},
+      {x: 5, y: 1 + 1 * Math.pow(5, 3)}
+    ];
+
+    // Create a new chart
+    var ctx = document.getElementById(&quot;myChart&quot;).getContext(&quot;2d&quot;);
+    var chart = new Chart(ctx, {
+      type: &quot;line&quot;,
+      data: {
+        datasets: [
+          {
+            label: &quot;Linear Data&quot;,
+            data: data,
+            backgroundColor: &quot;rgba(75, 192, 192, 0.2)&quot;,
+            borderColor: &quot;rgba(75, 192, 192, 1)&quot;,
+            borderWidth: 1
+          },
+          {
+            label: &quot;Quadratic Data&quot;,
+            data: quadraticData,
+            backgroundColor: &quot;rgba(255, 99, 132, 0.2)&quot;,
+            borderColor: &quot;rgba(255, 99, 132, 1)&quot;,
+            borderWidth: 1
+          },
+          {
+            label: &quot;Cubic Data&quot;,
+            data: cubicData,
+            backgroundColor: &quot;rgba(255, 206, 86, 0.2)&quot;,
+            borderColor: &quot;rgba(255, 206, 86, 1)&quot;,
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          x: {
+            type: &quot;linear&quot;,
+            position: &quot;bottom&quot;,
+            ticks: {
+              color: '#ffffff' // Light text for dark background
+            },
+            border: {
+                color: '#ffffff'
+            }           
+          },
+          y: {
+            ticks: {
+              color: '#ffffff' // Light text for dark background
+            },
+            border: {
+                color: '#ffffff'
+           	} 
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#ffffff' // Light text for dark background
+            }
+          }
+        }
+      }
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+                        
+                        
+                        
+                        " style="width: 960px; height: 700px;"></iframe>
+<div class="sl-block" data-block-type="text" data-name="text-f769dc" style="height: auto; width: 600px; left: 180px; top: 591px;" data-block-id="22dcaad181eec4b56c8d4ab440e611d2">
+    <div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;">
+        <p>Example: Polynomial regression</p>
+    </div>
+</div></section><section data-id="ba61a70752547d770163f34c3f1d4bcd"><div class="sl-block" data-block-type="code" data-name="code-825d8c" style="width: 942px; height: 354px; left: 18px; top: 154.5px;" data-block-id="56a0554c74234efdc8a95deb19aa58a6"><div class="sl-block-content notranslate" data-highlight-theme="monokai" data-code-frame="none" style="z-index: 10;"><pre class="javascript" style="font-size: 16px; line-height: 19px; tab-size: 4;"><code data-line-numbers="2|4-8|10-16|1,17-18|1-18">model function poly(data: Real[][]): Int {
+    assume n ~ Poisson(1.0); // sample the degree of the polynomial
+
+    // Sample the coefficients from n + 1 (we need one coeff for const poly)
+    let coeffs = repApply(addi(n, 1), function() {
+        assume g ~ Gaussian(0.0, 1.0);
+        return g;
+    });
+
+    // likelihood
+    let sigma = 1.0; // noise term
+    sapply(data, function(datum: Real[]) {
+        let predictedY = polynomialFunction(coeffs, datum[1]);
+        observe datum[2] ~ Gaussian(predictedY, sigma);
+    });
+    
+    return n;
+}</code></pre></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-3ba8b6" style="height: auto; width: 800px; left: 89px; top: 90.5px;" data-block-id="69caf2e0b9fe0def1e72ce8aca9b0d41"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><p>TreePPL source code for the polynomial regression:</p></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-539ebe" style="height: auto; width: 600px; left: 189px; top: 533.5px;" data-block-id="f85a63260b23aae37dcf6a85c0ba4712"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;"><p><span style="font-size:0.5em">Not shown: a function <code>polynomialFunction </code>that evaluates a polynomial as specified by a coefficient vector at a given data point.</span></p></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-9ccf93" data-block-id="8122f54909b887fc1b15d48db8292016" style="height: auto; width: 600px; left: 189px; top: 26.5px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;"><p><a href="http://100.79.217.116:8888/notebooks/Poly.ipynb" target="_blank"><span style="font-size:0.5em">http://100.79.217.116:8888/notebooks/Poly.ipynb</span></a></p></div></div></section><section data-id="40c6bfa36e747ef9a2d3d8445f73fed0"><div class="sl-block" data-block-type="text" style="height: auto; width: 863px; left: 48.5px; top: 186.5px;" data-name="text-bad373" data-block-id="a133b463e1c244d6a18ce041cf403789"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;"><ul>
+	<li>
+<a href="http://treeppl.org" target="_blank">TreePPL</a>: a DSL built on top of the Miking platform
+	<ul>
+		<li class="fragment" data-fragment-index="0">universal: stochastic recursion and stochastic branching</li>
+		<li class="fragment" data-fragment-index="1">easy syntax</li>
+		<li class="fragment" data-fragment-index="2">static types (with type inference)</li>
+		<li class="fragment" data-fragment-index="3">compiled</li>
+		<li class="fragment" data-fragment-index="4">supports different inference schemas</li>
+		<li class="fragment" data-fragment-index="5">has a library an interface suitable for biologists</li>
+	</ul>
+	</li>
+</ul></div></div></section><section data-id="31c7e0c4ce7acb05cceb508f8b1585f3">
+
+
+
+
+<div class="sl-block" data-block-type="text" data-name="text-c6fbbd" style="height: auto; width: 960px; left: 0px; top: 82px;" data-block-id="e977a67041710c73191031da59300361"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;"><h2>IS treeppl A DSL?</h2></div></div>
+
+
+
+<div class="sl-block" data-block-type="text" data-name="text-9bab78" data-block-id="ede34250296b4a0900ecacf828390da4" style="height: auto; width: 480px; left: 0px; top: 180.5px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><h3>YES</h3></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 480px; left: 480px; top: 180.5px;" data-block-id="26d1801b062fb25a3255dadf7135c09e" data-name="text-c4587c"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;"><h3>YES, AND ...</h3></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-01f5b9" data-block-id="6b33a1108e73b5df196e2309c439ec1c" style="height: auto; width: 480px; left: 0px; top: 253px;"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13; font-size: 85%; letter-spacing: -0.05em;" data-has-letter-spacing=""><ul>
+	<li class="fragment" data-fragment-index="0">Inference powerful enough for phylogenetics</li>
+	<li class="fragment" data-fragment-index="1">Syntax based on languages familiar to phylogeneticists</li>
+	<li class="fragment" data-fragment-index="2">Interface to Python and R enabling the use of BioPython and Bioconductor</li>
+	<li class="fragment" data-fragment-index="3">Examples on website based on phylogenetic problems</li>
+	<li class="fragment" data-fragment-index="4">Tree datatypes in the standard library</li>
+	<li class="fragment" data-fragment-index="5">Developers have knowledge of phylogenetics</li>
+</ul></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 480px; left: 480px; top: 249.5px;" data-block-id="a6ccc453bb3037dba243ca264b7f543a" data-name="text-7fb8e5"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14; font-size: 85%; letter-spacing: -0.05em;" data-has-letter-spacing=""><ul>
+	<li class="fragment" data-fragment-index="0">SMC and MCMC schemas useful across domains</li>
+	<li class="fragment" data-fragment-index="1">C-like syntax familiar to empiricists across domains</li>
+	<li class="fragment" data-fragment-index="2">Python and R provide I/O packages across domains</li>
+	<li class="fragment" data-fragment-index="3"><s>Examples are not easily generalizable to e.g. finance</s></li>
+	<li class="fragment" data-fragment-index="4"><em>Tree datatypes exist in some domains</em></li>
+	<li class="fragment" data-fragment-index="5"><em>Developers would not be able support  user queries from e.g. physics</em></li>
+</ul></div></div></section><section data-auto-animate="" data-id="17095028a20a3eb845eb9948691d88a7">
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" data-name="text-eb7957" style="height: auto; width: 600px; left: 180px; top: 73.781px;" data-block-id="c48fe7965e9afe282595cec178a85b0a"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 10;"><h2>some References</h2></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-2fa4db" style="height: auto; width: 930px; left: 15px; top: 182.219px;" data-block-id="e9098e9279b4d368f791aca8f5ad1024"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;"><p>📰 Senderov, Kudlicka, Ronquist et al. "Universal probabilistic programming offers a powerful approach to statistical phylogenetics." Communications biology 4.1 (2021): 244.</p></div></div>
+<div class="sl-block" data-block-type="text" style="height: auto; width: 930px; left: 15px; top: 304.219px;" data-name="text-fa5472" data-block-id="560304507e533ded79c6c801b9a8d5de"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 12;"><p>📰 Senderov, Kudlicka et al. "TreePPL: A Universal Probabilistic Programming Language for Phylogenetics." bioRxiv (2023): 2023-10.</p></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-769d0a" style="height: auto; width: 945px; left: 7.5px; top: 426.219px;" data-block-id="c4badea3ef53472715f3a08fd19428f4"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 13;"><p>📰 Kudlicka, Jan, et al. "Probabilistic programming for birth-death models of evolution using an alive particle filter with delayed sampling." Uncertainty in Artificial Intelligence. PMLR, 2020.</p></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-320538" style="height: auto; width: 930px; left: 15px; top: 548.219px;" data-block-id="af39d5f56af19b3ac0379d79badc9716"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;"><p>📰 Lundén, Daniel, et al. "Automatic Alignment in Higher-Order Probabilistic Programming Languages." ESOP. 2023.</p></div></div></section><section data-auto-animate="" data-id="968c33e0a58432c02f09b845f4ba8c50">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sl-block" data-block-type="text" style="height: auto; width: 357.524px; left: 221.238px; top: 59.246px;" data-name="text-a2aad2" data-block-id="a29e6c2dde59ada39c343889530d5576"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 11;">
+<p style="text-align:left"><span style="font-size:1.0em">David Broman</span></p>
+
+<p style="text-align:left"><span style="font-size:1.0em">Daniel Lundén</span></p>
+
+<p style="text-align:left"><span style="font-size:1.0em">Emma Granqvist</span></p>
+
+<p style="text-align:left"><span style="font-size:1.0em">Fredrik Ronquist</span></p>
+
+<p style="text-align:left"><span style="font-size:1.0em">Gizem Çaylak</span></p>
+
+<p style="text-align:left"><span style="font-size:1em">Jan Kudlicka</span></p>
+
+<p style="text-align:left"><span style="font-size:1.0em">Jérémy Andréoletti</span></p>
+
+<p style="text-align:left"><span style="font-size:1.0em">Mariana Braga</span></p>
+
+<p style="text-align:left">Thimothée Virgoulay</p>
+
+<p style="color:rgb(255, 255, 255); text-align:left">Viktor Palmkvist</p>
+</div></div>
+
+<div class="sl-block" data-block-type="image" data-name="image-b63506" style="width: 137.111px; height: 133px; left: 817.889px; top: 5px; min-width: 1px; min-height: 1px;" data-block-id="21513a1718dd112121246671041001d2"><div class="sl-block-content" style="z-index: 12;"><img class="" data-natural-width="567" data-natural-height="550" data-lazy-loaded="" data-src="2024-12-04-miking-workshop-treeppl/ada0fa244d37ca37aa00074e751cae7b.png"></div></div>
+
+<div class="sl-block" data-block-type="text" data-name="text-af1e44" style="height: auto; width: 600px; left: -206px; top: 251.246px;" data-block-id="d8b88ec33f73dc6f5d6f22f8711e2a76"><div class="sl-block-style" style="z-index: 14; transform: rotate(-90deg);"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 14;"><h2>thank you</h2></div></div></div>
+<div class="sl-block" data-block-type="text" data-name="text-eb94d9" style="height: auto; width: 960px; left: 0px; top: 610px;" data-block-id="af6d0c8812b617057823b79ac3c4fe32"><div class="sl-block-content" data-placeholder-tag="p" data-placeholder-text="Text" style="z-index: 15;"><p><em><span style="font-size:0.7em">Funded by the EU Horizon 2020 Marie Skłodowska-Curie grant agreement PhyPPL No. 898120,<br>
+and by the Swedish Foundation for Strategic Research, as well as Vetenskapsrådet (VR).</span></em></p></div></div></section></section>
+			</div>
+		</div>
+
+		<script>
+			var SLConfig = {"deck": {"id":3314396,"slug":"2024-12-04-miking-workshop-treeppl","title":"2024-12-04 Miking Workshop - TreePPL - A DSL in Miking for Phylogenetics","description":"","width":960,"height":700,"margin":0.05,"visibility":"self","published_at":null,"sanitize_messages":null,"thumbnail_url":"https://s3.amazonaws.com/media-p.slid.es/thumbnails/c45b7564ed4aadd2be2bfc6396f6ab43/thumb.jpg?1734108802","view_count":0,"user":{"id":2345295,"username":"viktorsenderov","name":"Viktor Senderov","description":null,"thumbnail_url":"https://lh3.googleusercontent.com/a/AEdFTp6avMDd4yCpemiTJiorbIvoEEZepgRAC2DdJg8ur5g=s96-c","account_type":"lite","team_id":null,"settings":{"id":56936183,"present_controls":true,"present_upsizing":true,"present_pointer":false,"present_notes":true,"default_deck_tag_id":null}},"background_transition":"slide","transition":"none","theme_id":null,"theme_font":"quicksand","theme_color":"black-orange","auto_slide_interval":0,"comments_enabled":false,"forking_enabled":false,"rolling_links":false,"center":false,"shuffle":false,"should_loop":false,"share_notes":false,"slide_number":false,"slide_count":34,"rtl":false,"version":2,"collaborative":true,"deck_user_editor_limit":1,"data_updated_at":1734108802649,"font_typekit":null,"font_google":null,"time_limit":null,"navigation_mode":"default","upsizing_enabled":true,"language":"en","notes":{"ed70fcb71d539b69555202127cbdc99e":"","19ce0af732ede3fd78ac4b27a6edbf42":"","2352a59c2908b2e68e0d830a1fa2bf4f":"In this section I would like to introduce","a48d5b549efd6c0e8efa15ad4bfd695c":"","8a91cc52fd4965030998df5fe07c0258":"","9671e54f9fcec4d5c1dd785aebfaf0d4":"","8bb84870dd6d27eed4201ce2a91d8a32":"","31e9b1a7cd590be697d58b48896178e3":"","0efbb9dd62cc948d387f6a3617d32247":"","09d21dbb94143c19bd7aa28f96ddb8c1":"","fbfd883bd67b106e5d10d7a793812bf2":"","71be67321742ff57df2dd60709b98083":"Unsurprisingly we found out that complex model, which allow for diversification rates to vary with time, such as the ones showed in green and orange here are a better fit to most evolutionary trees (we used 50 bird clades) than simpler models such as the constant-rate models.","21bcd990b0fabbc7a4f1578bcab10105":"We also found out that between time-varying models, a model where rate-changes occur continuously as species evolve is a better fit to bird data than a model where speciation drives rate changes.  This leads us to believe that trait evolution, not speciation, drives  gradual diversification rate changes in birds.","bae4b1b53263497930d299cccfef11f0":"Here we show the exact conditions where the new model \"beats\" the old models.","d73b1f0d11d49312b7c65aba51647d42":"","2fb43b992e8fdad991b69fe89c5ce2c0":"I have successfully implemented the mathematical model (left) in TreePPL (a version of Felseistein's message passing algorithm) and verified its correctness with simulations (right) and I am currently analyzing real world data.","ce74237b42d60c04b7a771079df5c9a8":"","7561465b6dbee912f9c91c242d851f77":"This is how science is organized in the current year","9c275a8eae3a82d2389b00d9f738d122":"","ddb0c5ceb4e1f851f240ea31707689fa":"This workflow illustrates also the historical development of science somehow.  While in ancient Greece having an idea and being able to express it in words was enough, later on in modern times you would need to write a mathematical formalization of your idea, and perhaps do some calculations on paper, in modern times as a scientist one is faced with the challenge of writing an efficient computer program encoding their model","c51811d628a196155ca6e3bfcf471a21":"","b130bcbd88520ee07a093c828dbfe5d9":"","9f65c960d8ca1cc1af17968c514ca9fe":"","66cacd486a36b21cfaba335783aa76e2":"","a19617a36a7b0e62fe3352583958d381":"","ba7bd231622634693f2a0576ffff5b9b":"","09adf8cdb7ada0a47f2d5ba22457a713":"","a609f31e577314deed7e0c40256fba15":"Explain Why do we model","5317ced2357987c8a7a319be5ba5b78c":"","4eee2d62dec5f18a40cab30817eefcb4":"Similiar to previous paradigms that have opened up new scientific horizons, I believe DDLS is paradigm shift in the way we do science and will allow us to address a brand new class of problems such as creating artificial intelligence, deep understanding of cellular processes and disease, and understanding biodiversity loss and climate change.","13245f93de57d35feaba4687413228d5":"","1191f49a4de1c7d0aea09b06e64ded94":"","2e156002b66f23340fdaefad61902073":"","87a567fa07b12d7ee47aa4ec6549ca5e":"","125a71b7f2b1cd265bfd2a81fd86ac07":"","c64a4a5fc46a2a1623ccb603e0901e02":"","4c3ddff75240e343549dc2807c50dd05":"","56653e4bf40e1c24f1200e3cdbadd7f6":"","cd22935adcf4c31a761d4989da62cadc":"","a5c32a91f7911f6c84da8bfef1862742":"","42cb9f54253401c0711c324589104260":"Importance Sampling YouTube tutorial:\n\nhttps://www.youtube.com/watch?v=7A2jXWmnUFw","20adc8837283da76964b171504d11324":"Figure 1: A speeding driver (Left: driver’s view) crashes into a pedestrian (yellow) emerging from behind an obstruction (blue). Given a single frame of camera footage (Right), OMEGAC infers whether driving below the speed limit would have prevented the crash.\n","7897262484521b6867d74105fe4b5cf2":"To wrap up: understanding of complex highly-interconnected data such as biodiversity data requires semantic databases and and understanding the dynamics of complex systems requires probabilistic programming languages. Generative AI can supplant manual attempts and automate the scaling up of semantic databases and probabilistic models.  Armed with these technologies we can address the challenges that biodiversity science will face in the 21st century.","a0416cef2eb39de970b1b9376e4827f6":"https://www.youtube.com/watch?v=aUkBa1zMKv4\u0026t=4s","1d5f0e21828fa1cafd5fb522514be926":"","cf6be8a9d6978d2e7f56f8456635b323":"","734064db818c3b5c4eb1a8ac237fede7":"","bc0ef326c7dab7269c908d04562e9ef9":"","2e8cc4bf9598ec8851af20307090ba41":"","492d894ef14293e1c15261b8e004abad":"","168fdee256b0a9ed6bcd3f6c0c449302":"","a8f9e59e82ed8c362a8b5545edf4e2fc":"LinguaPhy - a front-end for BEAST, can be used for visualization","8d016365080e0db9e475b914587514f1":"","d11ad20fd713d7ac675b878d2a6177fa":"","82be9baff548bc758e150d7227df04b3":"","eb7ff5224f9e67be061b4b4bfad61dd1":"","8e932835eee08c5244a39dab00ee2c87":"","ffc959689a1725aad4b8d6595a260b1e":"","02d054c66971414e41452e575eb151b2":"","319bbd3b1a58f885c9d365d5d6098266":"","92444f6b16def6e7f2a9d7e8ed7fd8c3":"","b227b71094afd5732857a7c2fc13aeb8":"","d04bea0ae34b15bcb2fe773ef7dfa1c7":"","1d255cb8b5a9e826b55192b2fa5f2e25":"","ffcac1e1d2a77d6dc79a6961b59625f9":"","0df768125ef3b3b6329e8b2ce18c96f5":"","69fed1f74b9969548e6842bbdd65e037":"","68b226256e310f07a63220108480c591":"","b20ff3bfad83dc902aac7c8ea91b11e2":"","bfe76e5e9560516abba471bfe0b82c6b":"","77b9310804c5dddcce32de3ea20a7766":"","c8cfaf8ffdb91ebec4218f165bbc06fe":"","ddb58a0716277dd8e24fdafb58fd8948":"","42c11c61f8f400d2daa2955645fc186d":"","32f5e39850a55a49bbd804285d7633ee":"","db9d8832041c85e601d9f85abf6af989":"","2285fe387774a42758f0985012aaa2b8":"","e6eb5f58f05b65581acb063f661eb757":"","a3e328422e38963da9ddade8025b957d":"","fa8ceaeac2a0346744e5260a1240c12f":"","5f642ae2f010942d3bbe3e56fc60a348":"","1bfd490046c3327a7f4eb1636ae27388":"- evolutionary trees of bird clades\n- colored by their estimated evolutionary rates","3bac750045c029826b2b5b24e3e75737":"","98e78a6101912ea4454eafff4864d226":"","910a8754b75c722b2d5185b49270fbb2":"- numbers represent line-numbers in a probabilistic program where observe statements are present (checkpoints)","8f894cc752d54001a865361a33d0361b":"","b547839595ec1e5a59a812294c140761":"","3f7778014d5ff40e89acf2b996a944be":"","d3c3525010a133df4cb10f6547af9746":"","3ca7ad4c4d0af17e1d708bbbb7e5f626":"","4b7455567f90d52c38e7ab7db1f2d5be":"","3db34d8fb66d5685c5add168b4c05ccd":"- original viral video can be found on the web, on TikTok, Reddit, and many other platforms\n- I am not the copyright owner but I believe it is in the public domain","7d32e2fd58499148eafd3b72bfd1176d":"","680a233e6a5bbbf9b6b458b965014c87":"","3f3c635134b14199112ec312c8c094ce":"","b66cb957600ab9210f9d25a7303239ed":"","b07b8c9e33ad7b76d4043aacba0fb5f3":"","c33849cf201588a83f2f3179acefa2a9":"","39dab2ee355052c47b4416c6afc739ac":"","4febe369ac16ffa758d23d4473532a5b":"Copyright © 2024 TreePPL Research and Development Team\nFunded by the EU Horizon 2020 Marie Skłodowska-Curie grant agreement PhyPPL No. 898120,\nand by the Swedish Foundation for Strategic Research, as well as Vetenskapsrådet (VR).\nThis slide has been designed using images from Flaticon.com","f2923748a550a003278b77cdc9ef0bfe":"","d22348236ac54303d94a4573cbb41fc3":"Phylogenetic inference​\n- complex models\n- large and variable number of r.v.'s\n\nInterest in Bayesian modeling\n- predominance of hard-coded MCMC\n\nChallenges\n- Manual implementation of MCMC\n\nlack of validatation\n\ncannot do model comparison\n\nperformance on large data-sets\n\nMiking\n\n​a meta language\n\n​In this presentation\n\n​Use Miking to develop a probabilisitc programming language (PPL) aimed at computational biologists","99a016bf5e0bd787ffe106915828e330":"​Phylogenetic inference​\ncomplex models\nlarge and variable number of r.v.'s\n\nInterest in Bayesian modeling\n\npredominance of hard-coded MCMC\n\nChallenges\n\nManual implementation of MCMC\n\nlack of validatation\n\ncannot do model comparison\n\nperformance on large data-sets\n\nMiking\n\n​a meta language\n\n​In this presentation\n\n​Use Miking to develop a probabilisitc programming language (PPL) aimed at computational biologists","9e8e3c34dd8fc2e7f8182479a697d4b3":"","090df4fe5437355f8745185e35c90a00":"","31c7e0c4ce7acb05cceb508f8b1585f3":"","46ec6da9996ae67a6a8a51193401fe72":"","7dd749c2b27d4dd75052c79b5dd88dc2":"","98dc7604dd933d40f68e53186baede40":"chart.js","ba61a70752547d770163f34c3f1d4bcd":"","3713c008f7ac088c53e5c40afb4d96a3":"","10a7c16e11732e6eaa31afdade1ae8d0":"","9a02a3c0067c47944644f3f139953925":"- numbers represent line-numbers in a probabilistic program where observe statements are present (checkpoints)"}}};
+
+
+			// Use local fonts
+			SLConfig.fonts_url = 'lib/fonts/';
+		</script>
+
+		<script src="lib/reveal.js"></script>
+		<script src="lib/reveal-plugins.js"></script>
+		<script src="lib/offline.js"></script>
+
+		<!-- Initialize the presentation -->
+		<script>
+			Reveal.initialize({
+				width: 960,
+				height: 700,
+				margin: 0.05,
+				
+
+				hash: true,
+				controls: true,
+				progress: true,
+				mouseWheel: false,
+				showNotes: false,
+				slideNumber: false,
+				fragmentInURL: true,
+
+				autoSlide: 0,
+				autoSlideStoppable: true,
+
+				autoAnimateMatcher: SL.deck.AutoAnimate.matcher,
+
+				scrollActivationWidth: null,
+
+				center: false,
+				shuffle: false,
+				loop: false,
+				rtl: false,
+				navigationMode: "default",
+
+				transition: "none",
+				backgroundTransition: "slide",
+
+				highlight: {
+					escapeHTML: false
+				},
+
+				plugins: [ RevealZoom, RevealNotes, RevealMarkdown, RevealHighlight ]
+			});
+		</script>
+
+		
+
+
+	</body>
+</html>
